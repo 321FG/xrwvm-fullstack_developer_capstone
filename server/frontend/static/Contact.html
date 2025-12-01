@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Contact Us - Dealerships</title>
+  <link rel="stylesheet" href="/static/bootstrap.min.css">
+  <link rel="stylesheet" href="/static/style.css">
+  <style>
+    .contact-header{background-color: darkturquoise; color:#fff; padding: 1.2rem 2rem;}
+    .contact-card{width:80%; margin: 3% auto; padding:1.5rem}
+    .info-list p{margin: .25rem 0}
+    .map-placeholder{background:#eee; height:220px; display:flex; align-items:center; justify-content:center; color:#666}
+    .required::after{content: " *"; color: red}
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light" style="background-color:darkturquoise; height: 1in;">
+    <div class="container-fluid">
+      <h2 style="padding-right: 5%;">Dealerships</h2>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarText">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" style="font-size: larger;" aria-current="page" href="/">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" style="font-size: larger;" href="/about">About Us</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" style="font-size: larger;" href="/contact">Contact Us</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="card contact-card">
+    <div class="contact-header">
+      <h1>Contact Us</h1>
+      <p style="margin:0">Have questions about our cars, financing or services? Reach out — we would love to hear from you.</p>
+    </div>
+
+    <div class="row mt-4">
+      <div class="col-md-6">
+        <div class="card p-3">
+          <h4>Send us a message</h4>
+          <form id="contactForm" action="/send-contact" method="post">
+            <div class="mb-3">
+              <label class="form-label required">Full name</label>
+              <input type="text" class="form-control" name="name" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label required">Email address</label>
+              <input type="email" class="form-control" name="email" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Phone</label>
+              <input type="tel" class="form-control" name="phone">
+            </div>
+            <div class="mb-3">
+              <label class="form-label required">Subject</label>
+              <input type="text" class="form-control" name="subject" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label required">Message</label>
+              <textarea class="form-control" name="message" rows="5" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Send Message</button>
+            <button type="button" id="mailtoBtn" class="btn btn-outline-secondary ms-2">Open in Email</button>
+          </form>
+          <small class="d-block mt-2 text-muted">We will respond within 2 business days.</small>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="card p-3">
+          <h4>Contact information</h4>
+          <div class="info-list mb-3">
+            <p><strong>Address:</strong> 123 Main St, Anytown, North America</p>
+            <p><strong>Phone:</strong> +1 (555) 123-4567</p>
+            <p><strong>Email:</strong> info@bestcars.example</p>
+            <p><strong>Opening hours:</strong> Mon - Fri: 9:00 AM - 6:00 PM</p>
+          </div>
+
+          <h5>Find us</h5>
+          <div class="map-placeholder mb-3">Map placeholder — embed Google Map here</div>
+
+          <h5>Key people</h5>
+          <div style="display:flex; gap:1rem;">
+            <div class="card" style="width:45%;">
+              <img class="card-img-top" src="/static/person.png" alt="Manager image">
+              <div class="card-body">
+                <p class="title">Manager</p>
+                <p class="card-text">General manager — sales & operations</p>
+                <p>manager@example.com</p>
+              </div>
+            </div>
+            <div class="card" style="width:45%;">
+              <img class="card-img-top" src="/static/person.png" alt="Support image">
+              <div class="card-body">
+                <p class="title">Customer Support</p>
+                <p class="card-text">Help with inquiries and aftersales</p>
+                <p>support@example.com</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer class="text-center py-3">
+    <small>&copy; <span id="year"></span> Best Cars Dealership. All rights reserved.</small>
+  </footer>
+
+  <script>
+    // Fill current year in footer
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Simple mailto fallback button
+    document.getElementById('mailtoBtn').addEventListener('click', function(){
+      const form = document.getElementById('contactForm');
+      const name = form.name.value || '';
+      const email = form.email.value || '';
+      const subject = form.subject.value || 'Contact from website';
+      const message = form.message.value || '';
+      const body = encodeURIComponent('Name: ' + name + '\nEmail: ' + email + '\n\n' + message);
+      window.location.href = 'mailto:info@bestcars.example?subject=' + encodeURIComponent(subject) + '&body=' + body;
+    });
+  </script>
+
+</body>
+</html>
