@@ -58,17 +58,60 @@ app.get('/fetchReviews/dealer/:id', async (req, res) => {
 
 // Express route to fetch all dealerships
 app.get('/fetchDealers', async (req, res) => {
-//Write your code here
+        try {
+          const documents = await Dealerships.find();
+          res.json(documents);
+        } catch (error) {
+          console.error('Error in /fetchDealers:', error);
+          res.status(500).json({ error: 'Error fetching dealerships' });
+        }
 });
 
 // Express route to fetch Dealers by a particular state
 app.get('/fetchDealers/:state', async (req, res) => {
-//Write your code here
+    const stateParam = req.params.state;
+    try {
+      const regex = new RegExp(`^${stateParam}$`, 'i');
+      const documents = await Dealerships.find({
+        $or: [
+          { state: regex }, // common field name
+          { st: regex }     // some datasets use 'st'
+        ]
+      });
+      res.json(documents);
+    } catch (error) {
+      console.error('Error in /fetchDealers/:state:', error);
+      res.status(500).json({ error: 'Error fetching dealerships by state' });
+    }
 });
 
 // Express route to fetch dealer by a particular id
 app.get('/fetchDealer/:id', async (req, res) => {
-//Write your code here
+    const idParam = req.params.id;
+    try {
+      let document = null;
+      const idAsNumber = Number(idParam);
+  
+      // Try numeric id field (many JSON dealer files use numeric `id`)
+      if (!Number.isNaN(idAsNumber)) {
+        document = await Dealerships.findOne({ id: idAsNumber });
+      }
+  
+      // If not found, try string id or Mongo _id
+      if (!document) {
+        document = await Dealerships.findOne({ id: idParam }) ||
+                   await Dealerships.findById(idParam).catch(() => null);
+      }
+  
+      if (!document) {
+        return res.status(404).json({ error: 'Dealer not found' });
+      }
+  
+      res.json(document);
+    } catch (error) {
+      console.error('Error in /fetchDealer/:id:', error);
+      res.status(500).json({ error: 'Error fetching dealer by id' });
+    }
 });
 
 //Express route to insert review
